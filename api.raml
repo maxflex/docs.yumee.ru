@@ -1,15 +1,95 @@
 #%RAML 1.0
 title: Yumee API
 version: v1
-baseUri: http://api.yumee.com
-/users:
-  post:
+baseUri: http://api.yumee.ru
+
+types:
+  phone_example:
+    description: Номер телефона в любом формате
+    required: true
+    examples:
+      1:
+        value: '79205556789'
+      2:
+        value: '(920) 555-67-89'
+
+/verify:
+  displayName: Подтвердить телефон
+  description: |
+    Отправить на указанный <code>phone</code> СМС-код для подтверждения номера телефона.
+    Статус <code>200 OK</code> в случае успешной отправки кода.
+    Повторный запрос возможен через 2 минуты.
   get:
-    body:
-      application/json:
+    queryParameters:
+      phone: phone_example
+    responses:
+      200:
+        description: Код отправлен
+      422:
+        description: Неверный номер телефона
+        body:
+          application/json:
+            example:
+              error: wrong number
+/token:
+  displayName: Авторизация
+  description: |
+    Получить JSON WEB TOKEN для авторизации запросов.
+    Возвращает <code>404 NOT FOUND</code>, если введён неверный код
+    подтверждения и <code>201 CREATED</code> в случае успешной генерации
+    токена. Если пользователя с переданным <code>phone</code> ещё
+    не существует, то он будет создан автоматически.
+    <p style='color: #f92672; margin-top: 20px'>
+      Далее, для авторизации запросов полученный JWT-токен необходимо включать в заголовок:<br>
+      <code>Authorization: {{ JWT_TOKEN }}</code>
+    </p>
+  post:
+    queryParameters:
+      phone: phone_example
+      code:
+        description: |
+          4-х занчный код подтверждения, высланный по СМС на <code>phone</code>
+          методом <code>/verify</code>
+        required: true
+        examples:
+          1:
+            value: '1234'
+    responses:
+      201:
+        description: JWT успешно сгенерирован
+        body:
+          application/json:
+            example:
+              jwt: eyJ0eXAiOqJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOjJ9.iKJk6o6Z6aAIEiF_e4nXyXSVM-3Mg1y9o-EnCu-Dq5s
+      404:
+        description: Неверный код подтверждения
+/plans:
+  displayName: Тарифные планы
+  description: Получить список тарифных планов
+  get:
     responses:
       200:
         body:
           application/json:
-            type: array
-
+            example:
+              [
+                {
+                    "id": 1,
+                    "title": "Похудеть",
+                    "description": "Кол-во каллорий меньше суточной нормы",
+                    "logo": logo_1.png
+                },
+                {
+                    "id": 2,
+                    "title": "Быть в форме",
+                    "description": "Кол-во каллорий равно суточной норме",
+                    "logo": logo_2.png
+                },
+                {
+                    "id": 3,
+                    "title": "Быть в форме",
+                    "description": "Кол-во каллорий больше суточной нормы",
+                    "logo": logo_2.png
+                }
+            ]
+      401:
