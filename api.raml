@@ -44,8 +44,8 @@ types:
     </p>
   post:
     queryParameters:
-      phone: phone_example
-      code:
+      auth[phone]: phone_example
+      auth[code]:
         description: |
           4-х занчный код подтверждения, высланный по СМС на <code>phone</code>
           методом <code>/verify</code>
