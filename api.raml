@@ -95,7 +95,7 @@ types:
   displayName: Профиль
   description: Получение и обновление данных текущего (залогиненного) профиля
   get:
-    description: Получить информацию о профиле
+    description: Получить информацию о текущем профиле
     responses:
       200:
         body:
@@ -130,7 +130,7 @@ types:
                 }
             }
   put:
-    description: Обновить профиль
+    description: Обновить текущий профиль
     queryParameters:
       name:
         required: false
