@@ -91,4 +91,113 @@ types:
                     "logo": logo_2.png
                 }
             ]
-      401:
+/profile:
+  displayName: Профиль
+  description: Управление профилем
+  get:
+    displayName: Получить информацию о профиле
+    responses:
+      200:
+        body:
+          application/json:
+            example:
+              {
+                "name": "Берестовой Андрей",
+                "phone": "79205556789",
+                "preferences": [1, 5],
+                "age": 25,
+                "height": 175,
+                "weight": 60,
+                "plan": {
+                    "id": 2,
+                    "title": "Быть в форме",
+                    "description": "Кол-во каллорий равно суточной норме",
+                    "logo": logo_2.png
+                },
+                "address": {
+                    "id": 7,
+                    "street": "ул. Тверская",
+                    "building": 105,
+                    "corpus": 2,
+                    "floor": 9,
+                    "flat": 170,
+                    "stroenie": null,
+                    "domofon": 170K8877,
+                    "comment": Звонок на этаже не работает,
+                    "lat": null,
+                    "lng": null,
+                    "city_id": 1
+                }
+            }
+  put:
+    displayName: Обновить профиль
+    queryParameters:
+      name:
+        required: false
+        description: Имя
+        example: Берестовой Андрей
+      preferences:
+        required: false
+        description: |
+          Предпочтения по графику питания:<br>
+          <p>
+            <span style='display: block'>1. Завтрак</span>
+            <span style='display: block'>2. Обед</span>
+            <span style='display: block'>3. Полдник</span>
+            <span style='display: block'>4. Десерт</span>
+            <span style='display: block'>5. Ужин</span>
+          </p>
+        type: array
+        example: [1, 5]
+      age:
+        required: false
+        description: Возраст
+        type: integer
+        example: 25
+      height:
+        required: false
+        description: Рост
+        type: integer
+        example: 180
+      weight:
+        required: false
+        description: Вес
+        # type: float @todo: разобраться
+        example: '65.2'
+      plan_id:
+        required: false
+        description: ID тарифного плана (см. <a href='#тарифные-планы'>тарифные планы</a>)
+        type: integer
+        example: 3
+      address[street]:
+        required: false
+        description: Улица
+        example: ул. Тверская
+      address[building]:
+        required: false
+        description: Дом
+        example: '1'
+      address[corpus]:
+        required: false
+        description: Корпус
+        example: '5'
+      address[stroenie]:
+        required: false
+        description: Строение
+        example: '1'
+      address[domofon]:
+        required: false
+        description: Код домофона
+        example: 170K8877
+      address[comment]:
+        required: false
+        description: Комментарий к адресу
+        example: Звонок на этаже не работает
+      address[lat]:
+        required: false
+        description: Широта
+        example: '55.7558'
+      address[lng]:
+        required: false
+        description: Долгота
+        example: '37.6173'
